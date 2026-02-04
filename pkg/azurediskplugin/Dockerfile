@@ -14,7 +14,8 @@
 
 FROM registry.k8s.io/build-image/debian-base:bookworm-v1.0.6
 
-RUN apt update && apt upgrade -y && apt-mark unhold libcap2 && clean-install util-linux e2fsprogs mount ca-certificates udev xfsprogs btrfs-progs
+RUN apt update && apt upgrade -y && apt-mark unhold libcap2 && clean-install util-linux e2fsprogs mount ca-certificates udev xfsprogs btrfs-progs \
+    && rm -f /bin/sh /bin/bash /bin/dash /usr/bin/sh /usr/bin/bash /usr/bin/dash 2>/dev/null || true
 
 LABEL maintainers="andyzhangx"
 LABEL description="Azure Disk CSI Driver"
