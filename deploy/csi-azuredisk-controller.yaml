@@ -35,6 +35,13 @@ spec:
         - key: "CriticalAddonsOnly"
           operator: "Exists"
           effect: "NoSchedule"
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: csi-azuredisk-controller
       containers:
         - name: csi-provisioner
           image: mcr.microsoft.com/oss/v2/kubernetes-csi/csi-provisioner:v6.1.0
@@ -164,6 +171,15 @@ spec:
             requests:
               cpu: 10m
               memory: 20Mi
+          livenessProbe:
+            httpGet:
+              host: localhost
+              path: /healthz
+              port: 29602
+            initialDelaySeconds: 10
+            timeoutSeconds: 3
+            periodSeconds: 10
+            failureThreshold: 5
           securityContext:
             capabilities:
               drop:

@@ -31,6 +31,13 @@ spec:
           operator: "Equal"
           value: "true"
           effect: "NoSchedule"
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: csi-snapshot-controller
       containers:
         - name: csi-snapshot-controller
           image: mcr.microsoft.com/oss/kubernetes-csi/snapshot-controller:v5.0.1

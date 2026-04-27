@@ -29,6 +29,13 @@ spec:
         - key: "node-role.kubernetes.io/control-plane"
           operator: "Exists"
           effect: "NoSchedule"
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: csi-azuredisk-controller
       containers:
         - name: csi-provisioner
           image: mcr.microsoft.com/oss/kubernetes-csi/csi-provisioner:v3.2.0
